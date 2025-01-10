@@ -34,6 +34,7 @@ interface ClientData {
   city: string;
 }
 
+
 export default function NotaVenta() {
   const [selectedItems, setSelectedItems] = useState<SaleItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -125,138 +126,175 @@ export default function NotaVenta() {
   );
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <h2 className="text-xl font-bold mb-2">Neurone Cosmetica Notas de Venta</h2>
-        <div className="grid grid-cols-2 gap-4">
-        
-        </div>
-      </div>
+    <>
+      {/* Fondo rosa con imagen de fondo */}
+      <div
+        style={{
+          backgroundImage: 'url("../../public/imagenes/1.jpg")', // Ruta de la imagen de fondo
+          backgroundSize: 'cover', // Asegura que la imagen cubra toda la pantalla
+          backgroundPosition: 'center', // Centra la imagen
+          backgroundColor: 'pink', // Color de fondo si no hay imagen
+          width: '100%', // Cubre todo el ancho de la pantalla
+          minHeight: '100vh', // Altura mínima del contenedor para cubrir toda la pantalla
+          position: 'absolute', // Asegura que el fondo quede en el fondo
+          top: '0', // Posiciona desde el top
+          left: '0', // Posiciona desde la izquierda
+        }}
+      ></div>
 
-      <div className="mb-4">
-        <h2 className="text-xl font-bold mb-2">Datos del Cliente</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <Input
-            placeholder="Nombre Cliente"
-            value={clientData.name}
-            onChange={(e) => setClientData({ ...clientData, name: e.target.value })}
-          />
-          <Input
-            placeholder="Plazo de compra"
-            value={clientData.nit}
-            onChange={(e) => setClientData({ ...clientData, nit: e.target.value })}
-          />
-          <Input
-            placeholder="Teléfono Cliente"
-            value={clientData.phone}
-            onChange={(e) => setClientData({ ...clientData, phone: e.target.value })}
-          />
-          <Input
-            placeholder="Email Cliente"
-            value={clientData.email}
-            onChange={(e) => setClientData({ ...clientData, email: e.target.value })}
-          />
-        </div>
-      </div>
+      {/* Contenedor centrado sobre el fondo */}
+      <div
+        style={{
+          display: 'flex', // Flexbox para centrar el contenido
+          justifyContent: 'center', // Centra horizontalmente
+          alignItems: 'center', // Centra verticalmente
+          minHeight: '100vh', // Asegura que el recuadro esté centrado
+          padding: '20px', // Espaciado alrededor
+          position: 'relative', // Este contenedor se coloca sobre el fondo
+        }}
+      >
+        <div
+          style={{
+            marginLeft: '150%', // Desplaza el recuadro hacia la derecha
+            backgroundColor: 'pink',
+          }}
+        ></div>
 
-      <div className="mb-4">
-        <h2 className="text-xl font-bold mb-2">Productos</h2>
-        <div className="relative">
-          <Input
-            placeholder="Buscar productos..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pr-10"
-          />
-          <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-        </div>
-
-        {searchTerm && (
-          <div className="mt-2 border rounded-md shadow-sm">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => {
-                  setSelectedItems([...selectedItems, { quantity: 1, product }]);
-                  setSearchTerm('');
-                }}
-              >
-                {product.name} - ${product.price.toLocaleString()}
-              </div>
-            ))}
+        {/* Recuadro blanco con los componentes */}
+        <div className="p-4 bg-white rounded-lg shadow-lg w-full max-w-4xl">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold mb-2">Neurone Cosmetica Notas de Venta</h2>
+            <div className="grid grid-cols-2 gap-4"></div>
           </div>
-        )}
+
+          {/* Datos del Cliente */}
+          <div className="mb-4">
+            <h2 className="text-xl font-bold mb-2">Datos del Cliente</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                placeholder="Nombre Cliente"
+                value={clientData.name}
+                onChange={(e) => setClientData({ ...clientData, name: e.target.value })}
+              />
+              <Input
+                placeholder="Plazo de compra"
+                value={clientData.nit}
+                onChange={(e) => setClientData({ ...clientData, nit: e.target.value })}
+              />
+              <Input
+                placeholder="Teléfono Cliente"
+                value={clientData.phone}
+                onChange={(e) => setClientData({ ...clientData, phone: e.target.value })}
+              />
+              <Input
+                placeholder="Email Cliente"
+                value={clientData.email}
+                onChange={(e) => setClientData({ ...clientData, email: e.target.value })}
+              />
+            </div>
+          </div>
+
+          {/* Productos */}
+          <div className="mb-4">
+            <h2 className="text-xl font-bold mb-2">Productos</h2>
+            <div className="relative">
+              <Input
+                placeholder="Buscar productos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pr-10"
+              />
+              <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+            </div>
+
+            {searchTerm && (
+              <div className="mt-2 border rounded-md shadow-sm">
+                {filteredProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => {
+                      setSelectedItems([...selectedItems, { quantity: 1, product }]);
+                      setSearchTerm('');
+                    }}
+                  >
+                    {product.name} - ${product.price.toLocaleString()}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Tabla de Productos Seleccionados */}
+          <table className="w-full mb-4">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left p-2">Cantidad</th>
+                <th className="text-left p-2">Descripción</th>
+                <th className="text-right p-2">Precio Unitario</th>
+                <th className="text-right p-2">Total</th>
+                <th className="text-center p-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedItems.map((item, index) => (
+                <tr key={index} className="border-b">
+                  <td className="p-2">
+                    <Input
+                      type="number"
+                      min="1"
+                      value={item.quantity}
+                      onChange={(e) => {
+                        const newItems = [...selectedItems];
+                        newItems[index].quantity = parseInt(e.target.value) || 1;
+                        setSelectedItems(newItems);
+                      }}
+                      className="w-20"
+                    />
+                  </td>
+                  <td className="p-2">{item.product.name}</td>
+                  <td className="text-right p-2">${item.product.price.toLocaleString()}</td>
+                  <td className="text-right p-2">${(item.quantity * item.product.price).toLocaleString()}</td>
+                  <td className="text-center p-2">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDeleteItem(index)}
+                      className="p-2"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Resumen */}
+          <div className="text-right mb-4">
+            <p>Subtotal: ${subtotal.toLocaleString()}</p>
+            <p className="font-bold">Total: ${total.toLocaleString()}</p>
+          </div>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full" style={{ backgroundColor: 'pink' }}>
+                <Printer className="mr-2 h-4 w-4" />
+                Previsualizar e Imprimir
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl">
+              <DialogHeader>
+                <DialogTitle>Neurone Cosmetica</DialogTitle>
+              </DialogHeader>
+              <Preview />
+              <Button onClick={handlePrint} style={{ backgroundColor: 'pink' }}>
+                Imprimir
+              </Button>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
-
-      <table className="w-full mb-4">
-        <thead>
-          <tr className="border-b">
-            <th className="text-left p-2">Cantidad</th>
-            <th className="text-left p-2">Descripción</th>
-            <th className="text-right p-2">Precio Unitario</th>
-            <th className="text-right p-2">Total</th>
-            <th className="text-center p-2">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedItems.map((item, index) => (
-            <tr key={index} className="border-b">
-              <td className="p-2">
-                <Input
-                  type="number"
-                  min="1"
-                  value={item.quantity}
-                  onChange={(e) => {
-                    const newItems = [...selectedItems];
-                    newItems[index].quantity = parseInt(e.target.value) || 1;
-                    setSelectedItems(newItems);
-                  }}
-                  className="w-20"
-                />
-              </td>
-              <td className="p-2">{item.product.name}</td>
-              <td className="text-right p-2">${item.product.price.toLocaleString()}</td>
-              <td className="text-right p-2">${(item.quantity * item.product.price).toLocaleString()}</td>
-              <td className="text-center p-2">
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDeleteItem(index)}
-                  className="p-2"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="text-right mb-4">
-        <p>Subtotal: ${subtotal.toLocaleString()}</p>
-        <p className="font-bold">Total: ${total.toLocaleString()}</p>
-      </div>
-
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full"  style={{ backgroundColor: 'pink' }}>
-            <Printer className="mr-2 h-4 w-4" />
-            Previsualizar e Imprimir
-          </Button>
-
-        </DialogTrigger>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Neurone Cosmetica</DialogTitle>
-          </DialogHeader>
-          <Preview />
-          <Button onClick={handlePrint} style={{ backgroundColor: 'pink' }}>
-            <Printer className="mr-2 h-4 w-4" />
-            Imprimir
-          </Button>
-        </DialogContent>
-      </Dialog>
-    </div>
+    </>
   );
 }
