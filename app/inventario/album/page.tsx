@@ -57,7 +57,7 @@ const AlbumNuevo = () => {
                     Ver más
                   </button>
                 </DialogTrigger>
-                <DialogContent className="p-4 bg-pink-100 text-black rounded-lg shadow-md max-w-md mx-auto">
+                <DialogContent className="p-4 bg-yellow-100 text-black rounded-lg shadow-md max-w-md mx-auto">
                   <img
                     src={photo.src}
                     alt={photo.title}

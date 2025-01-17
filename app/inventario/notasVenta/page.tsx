@@ -141,6 +141,7 @@ export default function NotaVenta() {
 
   // Componente de vista previa
   const Preview = () => (
+
     <div className="p-8 bg-white">
       <div className="text-center mb-4">
         <h2 className="text-xl font-bold">NOTA DE VENTA</h2>
@@ -189,6 +190,43 @@ export default function NotaVenta() {
   );
 
   return (
+    <>
+    {/* Fondo rosa con imagen de fondo */}
+    <div
+      style={{
+        backgroundImage: 'url("/imagenes/1.jpg")', // Ruta de la imagen de fondo
+        backgroundSize: 'cover', // Asegura que la imagen cubra toda la pantalla
+        backgroundPosition: 'center', // Centra la imagen
+        backgroundColor: 'pink', // Color de fondo si no hay imagen
+        width: '100%', // Cubre todo el ancho de la pantalla
+        minHeight: '100vh', // Altura mínima del contenedor para cubrir toda la pantalla
+        position: 'absolute', // Asegura que el fondo quede en el fondo
+        top: '0', // Posiciona desde el top
+        left: '0', // Posiciona desde la izquierda
+      }}
+    ></div>
+
+    {/* Contenedor centrado sobre el fondo */}
+    <div
+      style={{
+        display: 'flex', // Flexbox para centrar el contenido
+        justifyContent: 'center', // Centra horizontalmente
+        alignItems: 'center', // Centra verticalmente
+        minHeight: '100vh', // Asegura que el recuadro esté centrado
+        padding: '20px', // Espaciado alrededor
+        position: 'relative', // Este contenedor se coloca sobre el fondo
+      }}
+    >
+      <div
+        style={{
+          marginLeft: '150%', // Desplaza el recuadro hacia la derecha
+          backgroundColor: 'pink',
+        }}
+      ></div>
+
+      {/* Recuadro blanco con los componentes */}
+      <div className="bg-white border-4 border-yellow-300 shadow-md rounded-lg p-6 transform -translate-x-20  -translate-y-5">
+        <div className="mb-4">
     <div className="container mx-auto p-4">
       {/* Indicador de conexión */}
       <div className="mb-4 flex items-center justify-between">
@@ -216,6 +254,7 @@ export default function NotaVenta() {
       </div>
 
       {/* Datos del Cliente */}
+      <h1 className="text-2xl font-bold mb-6 text-center">Nota de Venta</h1>
       <div className="mb-4">
         <h2 className="text-xl font-bold mb-2">Datos del Cliente</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -225,7 +264,7 @@ export default function NotaVenta() {
             onChange={(e) => setClientData({ ...clientData, name: e.target.value })}
           />
           <Input
-            placeholder="NIT"
+            placeholder="Plazo de compra"
             value={clientData.nit}
             onChange={(e) => setClientData({ ...clientData, nit: e.target.value })}
           />
@@ -343,5 +382,9 @@ export default function NotaVenta() {
         </Dialog>
       </div>
     </div>
+    </div>
+    </div>
+    </div>
+    </>
   );
 }
