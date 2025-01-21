@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-// Interfaz para el producto
 interface Producto {
   producto_id: number;
   nombre: string;
@@ -15,26 +14,44 @@ interface Producto {
 
 export default function GestionInventario() {
   const [productos, setProductos] = useState<Producto[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState<Partial<Producto>>({
     nombre: "",
     precio: undefined,
     stock: undefined,
   });
   const [productoSeleccionado, setProductoSeleccionado] = useState<Producto | null>(null);
-  
+
   // Estados para paginación
   const [paginaActual, setPaginaActual] = useState(1);
   const productosPorPagina = 5; // Cambiado de 10 a 5
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Obtener productos del backend
-  const fetchProductos = async () => {
+  // Función para obtener productos con término de búsqueda
+  const fetchProductos = async (search: string = "") => {
+    setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/products");
-      setProductos(response.data); // Actualiza la lista de productos
+      const response = await axios.get(`http://localhost:5000/api/products/search`, {
+        params: {
+          query: search
+        }
+      });
+      setProductos(response.data);
     } catch (error) {
       console.error("Error al obtener productos:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Efecto para manejar la búsqueda con debounce
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchProductos(searchTerm);
+    }, 500); // Espera 500ms después de que el usuario deje de escribir
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   // Agregar producto
   const handleAgregar = async () => {
@@ -44,8 +61,8 @@ export default function GestionInventario() {
         return;
       }
       await axios.post("http://localhost:5000/api/products", formData);
-      setFormData({ nombre: "", precio: undefined, stock: undefined }); // Reinicia el formulario
-      fetchProductos(); // Refresca la lista de productos
+      setFormData({ nombre: "", precio: undefined, stock: undefined });
+      fetchProductos(searchTerm);
     } catch (error) {
       console.error("Error al agregar producto:", error);
     }
@@ -63,8 +80,8 @@ export default function GestionInventario() {
         formData
       );
       setProductoSeleccionado(null);
-      setFormData({ nombre: "", precio: undefined, stock: undefined }); // Reinicia el formulario
-      fetchProductos(); // Refresca la lista de productos
+      setFormData({ nombre: "", precio: undefined, stock: undefined });
+      fetchProductos(searchTerm);
     } catch (error) {
       console.error("Error al modificar producto:", error);
     }
@@ -81,7 +98,7 @@ export default function GestionInventario() {
         `http://localhost:5000/api/products/${productoSeleccionado.producto_id}`
       );
       setProductoSeleccionado(null);
-      fetchProductos(); // Refresca la lista de productos
+      fetchProductos(searchTerm);
     } catch (error) {
       console.error("Error al eliminar producto:", error);
     }
@@ -97,7 +114,7 @@ export default function GestionInventario() {
     });
   };
 
-  // Obtener los productos al cargar el componente
+  // Cargar productos iniciales
   useEffect(() => {
     fetchProductos();
   }, []);
@@ -143,7 +160,7 @@ export default function GestionInventario() {
         }}
       >
         {/* Relleno blanco en el recuadro */}
-        <div className="bg-white border-4 border-yellow-300 shadow-md rounded-lg p-6 max-w-6xl w-full"> {/* Cambiar a w-full para que ocupe todo el ancho disponible */}
+        <div className="bg-white border-4 border-yellow-300 shadow-md rounded-lg p-6 max-w-6xl w-full">
           <h1 className="text-2xl font-bold mb-6 text-center">Gestión de Inventario</h1>
           {/* Formulario */}
           <div className="mb-6">
@@ -236,7 +253,7 @@ export default function GestionInventario() {
               </tbody>
             </table>
           </div>
-  
+
           {/* Controles de paginación */}
           <div className="flex justify-center mt-4">
             <div className="flex space-x-2">
@@ -255,6 +272,24 @@ export default function GestionInventario() {
               ))}
             </div>
           </div>
+
+          {/* Búsqueda */}
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border p-2 rounded w-full"
+            />
+          </div>
+
+          {/* Estado de carga */}
+          {isLoading && (
+            <div className="text-center mb-4">
+              Cargando productos...
+            </div>
+          )}
         </div>
       </div>
     </>
